@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import {
   View,
   Text,
@@ -18,12 +18,7 @@ import { Shift } from '../types';
 type Props = NativeStackScreenProps<RootStackParamList, 'ShiftList'>;
 
 const ShiftListScreen: React.FC<Props> = observer(({ navigation }) => {
-  useEffect(() => {
-    // Загружаем смены при первом открытии экрана
-    loadShifts();
-  }, []);
-
-  const loadShifts = async () => {
+  const loadShifts = useCallback(async () => {
     try {
       await shiftStore.loadShifts();
     } catch (error) {
@@ -33,7 +28,12 @@ const ShiftListScreen: React.FC<Props> = observer(({ navigation }) => {
         [{ text: 'OK' }]
       );
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    // Загружаем смены при первом открытии экрана
+    loadShifts();
+  }, [loadShifts]);
 
   const handleShiftPress = (shift: Shift) => {
     shiftStore.selectShift(shift);
@@ -50,8 +50,8 @@ const ShiftListScreen: React.FC<Props> = observer(({ navigation }) => {
   const renderEmptyComponent = () => (
     <View style={styles.emptyContainer}>
       <Text style={styles.emptyText}>
-        {shiftStore.error 
-          ? 'Произошла ошибка при загрузке смен' 
+        {shiftStore.error
+          ? 'Произошла ошибка при загрузке смен'
           : 'Смены не найдены'
         }
       </Text>
