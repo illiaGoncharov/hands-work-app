@@ -1,97 +1,149 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# HandsWork App
 
-# Getting Started
+**React Native приложение для поиска подработки с геолокацией**
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+[![React Native](https://img.shields.io/badge/React%20Native-0.81.4-blue.svg)](https://reactnative.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.8.3-blue.svg)](https://www.typescriptlang.org/)
+[![MobX](https://img.shields.io/badge/MobX-6.13.7-orange.svg)](https://mobx.js.org/)
 
-## Step 1: Start Metro
+> Мобильное приложение для поиска временной работы с использованием геолокации. Полная архитектура с MobX, TypeScript и React Navigation.
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
+## Функциональность
 
-To start the Metro dev server, run the following command from the root of your React Native project:
+- **Геолокация** - Автоматическое определение местоположения пользователя
+- **Список смен** - Загрузка доступных подработок в текущем городе
+- **Карточки смен** - Краткая информация с рейтингом и оплатой
+- **Детали смены** - Подробная информация о работодателе и условиях
+- **Pull-to-refresh** - Обновление списка потягиванием вниз
+- **Real-time** - Актуальная информация о количестве мест
 
-```sh
-# Using npm
-npm start
+## Технологический стек
 
-# OR using Yarn
-yarn start
+- **React Native 0.81.4** - Кроссплатформенная разработка без Expo
+- **TypeScript 5.8.3** - Статическая типизация для надёжности кода
+- **MobX 6.13.7** - Реактивное управление состоянием
+- **React Navigation 6** - Нативная навигация между экранами
+- **Geolocation Service** - Работа с GPS и разрешениями
+
+## Архитектура проекта
+
+```
+src/
+├── screens/          # Экраны приложения
+│   ├── ShiftListScreen.tsx     # Список смен с геолокацией
+│   └── ShiftDetailScreen.tsx   # Детальная информация о смене
+├── stores/           # MobX управление состоянием
+│   ├── ShiftStore.ts          # Центральный стор смен
+│   └── index.ts               # Экспорт сторов
+├── components/       # Переиспользуемые компоненты
+│   └── ShiftCard.tsx          # Карточка смены в списке
+├── services/         # Внешние сервисы
+│   ├── api.ts                 # HTTP клиент для API
+│   └── location.ts            # GPS и разрешения
+├── types/           # TypeScript интерфейсы
+│   └── index.ts               # Типы данных
+└── navigation/      # Навигация
+    └── AppNavigator.tsx       # React Navigation стек
 ```
 
-## Step 2: Build and run your app
+## Установка и запуск
 
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
+### Требования
 
-### Android
+- Node.js 18+
+- React Native CLI
+- Android Studio (для Android)
+- Xcode (для iOS, только macOS)
 
-```sh
-# Using npm
-npm run android
+### Установка зависимостей
 
-# OR using Yarn
-yarn android
+```bash
+cd hands-work-app
+npm install
 ```
 
-### iOS
+### Настройка iOS (только macOS)
 
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
-
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
-
-```sh
-bundle install
+```bash
+cd ios && pod install && cd ..
 ```
 
-Then, and every time you update your native dependencies, run:
+### Запуск на Android
 
-```sh
-bundle exec pod install
+```bash
+npx react-native run-android
 ```
 
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
+### Запуск на iOS
 
-```sh
-# Using npm
-npm run ios
-
-# OR using Yarn
-yarn ios
+```bash
+npx react-native run-ios
 ```
 
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
+## API
 
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
+Приложение использует API: `https://mobile.handswork.pro/api/shift?lat={latitude}&lng={longitude}`
 
-## Step 3: Modify your app
+### Поля данных смены:
 
-Now that you have successfully run the app, let's make changes!
+- `logo` - ссылка на логотип нанимателя
+- `address` - адрес проведения смены
+- `companyName` - имя компании нанимателя
+- `dateStartByCity` - дата начала смены
+- `timeStartByCity` - время начала
+- `timeEndByCity` - время окончания
+- `currentWorkers` - сколько людей уже набрано
+- `planWorkers` - сколько людей требуется
+- `workTypes` - наименование типа услуги
+- `priceWorker` - сумма выплаты за смену (в рублях)
+- `customerFeedbacksCount` - количество отзывов о клиенте
+- `customerRating` - рейтинг нанимателя (максимум 5)
 
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
+## Ключевые особенности
 
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
+### Архитектура
 
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
+- **Clean Architecture** - четкое разделение слоёв (UI → Store → Service → API)
+- **MVVM паттерн** - с MobX в качестве ViewModel слоя
+- **Dependency Injection** - через централизованный экспорт сторов
+- **Type Safety** - полная типизация TypeScript для предотвращения ошибок
 
-## Congratulations! :tada:
+### Производительность
 
-You've successfully run and modified your React Native App. :partying_face:
+- **Lazy Loading** - компоненты загружаются по требованию
+- **Observer Pattern** - автоматическое обновление только изменённых компонентов
+- **FlatList оптимизация** - эффективный рендеринг больших списков
+- **Error Boundaries** - graceful обработка ошибок
 
-### Now what?
+### UX/UI
 
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
+- **Material Design** - современный дизайн с карточками и shadows
+- **Адаптивность** - корректное отображение на разных размерах экранов
+- **Accessibility** - поддержка screen readers и навигации
+- **Loading States** - информативные индикаторы состояния загрузки
 
-# Troubleshooting
+## Документация
 
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
+- [`docs/GUIDE.md`](docs/GUIDE.md) - руководство по запуску и архитектуре
+- [`docs/architecture-diagram.md`](docs/architecture-diagram.md) - Mermaid схемы архитектуры
 
-# Learn More
+## Для работодателей
 
-To learn more about React Native, take a look at the following resources:
+Этот проект демонстрирует:
 
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+- **Современный React Native** - актуальные версии без устаревших подходов
+- **Архитектурное мышление** - правильная организация кода и разделение ответственности
+- **TypeScript экспертиза** - полная типизация без any и правильные интерфейсы
+- **State Management** - эффективное использование MobX для реактивности
+- **API интеграция** - работа с REST API, обработка ошибок, loading states
+- **Нативные возможности** - геолокация, разрешения, платформо-специфичная логика
+- **Production Ready** - обработка edge cases, error boundaries, graceful fallbacks
+
+### Время разработки: ~6 часов
+
+Включая полную архитектуру, документацию и тестирование функциональности.
+
+---
+
+**Контакты**: [GitHub](https://github.com/illiaGoncharov)
+**Статус**: Готов к собеседованию и обсуждению технических решений
