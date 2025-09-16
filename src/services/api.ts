@@ -1,4 +1,4 @@
-import { Shift, ApiResponse, Location } from '../types';
+import { Shift, Location } from '../types';
 
 const API_BASE_URL = 'https://mobile.handswork.pro/api';
 
